@@ -58,7 +58,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculatorApp\CalculatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WithDependencies\CurrencyConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
