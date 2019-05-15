@@ -41,6 +41,27 @@ namespace UnitTestsTutorial.Tests.WithDependencies
             });
         }
 
+        [Fact]
+        public void Should_Add_Exchange_Rate_To_Cache()
+        {
+            // arrange
+            var price = new SimplePrice
+            {
+                Price = 5,
+                CurrencyCode = "GBP"
+            };
+
+            var currencyToConvert = "EUR";
+
+            var sut = new Fixture()
+                .Configure();
+
+            // act
+            sut.ConvertPrice(price, currencyToConvert);
+
+            // assert
+        }
+
         private class Fixture
         {
             private int _exchangeRate;

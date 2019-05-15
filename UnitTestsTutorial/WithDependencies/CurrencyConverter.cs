@@ -25,6 +25,7 @@ namespace UnitTestsTutorial.WithDependencies
         public SimplePrice ConvertPrice(SimplePrice priceToConvert, string currencyToConvert)
         {
             var exchangeRate = _currencyAccess.GetExchangeRate(priceToConvert.CurrencyCode, currencyToConvert);
+            _currencyAccess.AddToCache(priceToConvert.CurrencyCode, currencyToConvert, exchangeRate);
             var value = exchangeRate * priceToConvert.Price;
 
             return new SimplePrice
