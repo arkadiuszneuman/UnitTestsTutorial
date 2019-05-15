@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Autofac.Extras.Moq;
+using FluentAssertions;
+using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,15 +11,6 @@ using Xunit;
 
 namespace UnitTestsTutorial.Tests.WithDependencies
 {
-
-    public class CurrencyAccessFake : ICurrencyAccess
-    {
-        public decimal GetExchangeRate(string currencyFrom, string currencyTo)
-        {
-            return 10;
-        }
-    }
-
     [Trait("CurrencyConverter", "Convert price")]
     public class CurrencyConverterTests
     {
@@ -27,19 +21,47 @@ namespace UnitTestsTutorial.Tests.WithDependencies
             var price = new SimplePrice
             {
                 Price = 5,
-                CurrencyCode = "PLN"
+                CurrencyCode = "GBP"
             };
 
             var currencyToConvert = "EUR";
 
-            var sut = new CurrencyConverter(new CurrencyAccessFake());
+            var sut = new Fixture()
+                .WithExchangeRate(10)
+                .Configure();
 
             // act
             var result = sut.ConvertPrice(price, currencyToConvert);
 
             // assert
-            Assert.Equal(50, result.Price);
-            Assert.Equal("EUR", result.CurrencyCode);
+            result.Should().BeEquivalentTo(new SimplePrice
+            {
+                Price = 50,
+                CurrencyCode = "EUR"
+            });
+        }
+
+        private class Fixture
+        {
+            private int _exchangeRate;
+
+            public Fixture WithExchangeRate(int exchangeRate)
+            {
+                _exchangeRate = exchangeRate;
+                return this;
+            }
+
+            public CurrencyConverter Configure()
+            {
+                using (var mock = AutoMock.GetLoose())
+                {
+                    mock.Mock<ICurrencyAccess>()
+                        .Setup(x => x.GetExchangeRate(It.IsAny<string>(), It.IsAny<string>()))
+                        .Returns(_exchangeRate);
+
+                    return mock.Create<CurrencyConverter>();
+                }
+            }
         }
     }
 }

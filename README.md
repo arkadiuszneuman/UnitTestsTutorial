@@ -7,3 +7,15 @@ NUnit vs. MbUnit vs. MSTest vs. xUnit
 
 - <https://xunit.net/>
 - <https://stackoverflow.com/questions/261139/nunit-vs-mbunit-vs-mstest-vs-xunit-ne>
+  
+## Moq
+
+- <https://github.com/Moq/moq4/wiki/Quickstart>
+
+## AutoMock
+
+- <https://autofac.readthedocs.io/en/latest/integration/moq.html>
+
+## FluentAssertions
+
+- <https://fluentassertions.com/documentation/>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace UnitTestsTutorial.Tests.CalculatorApp
             var result = sut.Divide(number1, number2);
 
             // assert
-            Assert.Equal(expectedResult, result);
+            expectedResult.Should().Be(result);
         }
 
         [Fact]
@@ -35,8 +36,11 @@ namespace UnitTestsTutorial.Tests.CalculatorApp
 
             var sut = new Calculator();
 
-            // act assert
-            Assert.Throws<DivideByZeroException>(() => sut.Divide(number1, number2));
+            // act 
+            Action result = () => sut.Divide(number1, number2);
+
+            // assert
+            result.Should().ThrowExactly<DivideByZeroException>();
         }
     }
 }
